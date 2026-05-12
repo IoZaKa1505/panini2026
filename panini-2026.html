@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Panini FIFA World Cup 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0a0a1a;color:#fff;min-height:100vh}
+#header{background:linear-gradient(135deg,#1a1a3e,#0d0d2b);border-bottom:2px solid #c8a400;padding:14px 16px}
+.header-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.header-top h1{font-size:17px;font-weight:700;color:#ffd700}
+.header-top p{font-size:11px;color:#aaa}
+.progress-box{background:#111;border-radius:8px;padding:10px;border:1px solid #333}
+.progress-nums{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.prog-bar{background:#2a2a4a;border-radius:4px;height:8px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#4ade80,#22c55e);height:100%;transition:width .3s}
+.prog-label{text-align:center;font-size:11px;color:#888;margin-top:5px}
+#tabs{display:flex;background:#111;border-bottom:1px solid #333;position:sticky;top:0;z-index:10}
+.tab{flex:1;padding:10px 2px;background:transparent;border:none;border-bottom:2px solid transparent;color:#888;cursor:pointer;font-size:10px;font-weight:500}
+.tab.active{background:#1a1a3e;border-bottom-color:#ffd700;color:#ffd700;font-weight:700}
+#content{padding:10px}
+.filters{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.filters input{flex:1;min-width:100px;padding:8px 10px;background:#1a1a3e;border:1px solid #333;border-radius:8px;color:#fff;font-size:13px}
+.filters select{padding:8px 6px;background:#1a1a3e;border:1px solid #333;border-radius:8px;color:#fff;font-size:12px;max-width:160px}
+.sticker-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;margin-bottom:5px;border:1px solid #2a2a4a;background:#1a1a2e}
+.sticker-row.owned{background:#0d2b1a;border-color:#1a5c30}
+.check-btn{width:28px;height:28px;border-radius:6px;border:none;cursor:pointer;font-size:14px;flex-shrink:0;background:#2a2a4a;color:#666}
+.check-btn.owned{background:#22c55e;color:#fff}
+.sticker-info{flex:1;min-width:0}
+.sticker-id{font-size:11px;color:#ffd700;font-weight:700}
+.sticker-name{font-size:13px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sticker-row.owned .sticker-name{color:#fff}
+.sticker-team{font-size:10px;color:#555}
+.doubles-ctrl{display:flex;align-items:center;gap:3px;flex-shrink:0}
+.d-btn{width:22px;height:22px;background:#2a2a4a;border:none;border-radius:4px;color:#fff;cursor:pointer;font-size:14px;line-height:1}
+.d-num{font-size:13px;min-width:16px;text-align:center;color:#555}
+.d-num.has{color:#f97316}
+.missing-info{padding:10px;background:#1a1a2e;border-radius:8px;border:1px solid #333;font-size:13px;color:#aaa;margin-bottom:10px}
+.team-section{margin-bottom:12px}
+.team-title{font-size:13px;font-weight:700;color:#ffd700;margin-bottom:6px;padding:4px 0;border-bottom:1px solid #333}
+.tag-grid{display:flex;flex-wrap:wrap;gap:4px}
+.miss-tag{padding:4px 7px;background:#2a1a1a;border:1px solid #5c1a1a;border-radius:6px;color:#f87171;font-size:11px;cursor:pointer}
+.double-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#1a1500;border-radius:8px;border:1px solid #3d2e00;margin-bottom:6px}
+.double-info{flex:1}
+.double-id{font-size:12px;color:#ffd700;font-weight:700}
+.double-name{font-size:13px;color:#fff}
+.double-team{font-size:11px;color:#888}
+.d-ctrl{display:flex;align-items:center;gap:4px}
+.d-ctrl button{width:24px;height:24px;background:#3d2e00;border:none;border-radius:4px;color:#fff;cursor:pointer}
+.d-count{color:#f97316;font-weight:700;min-width:24px;text-align:center}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.stat-card{background:#1a1a2e;border-radius:10px;padding:14px;border:1px solid #333;text-align:center}
+.stat-val{font-size:26px;font-weight:700}
+.stat-lbl{font-size:12px;color:#888;margin-top:2px}
+.team-bar-lbl{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+.team-bar-bg{background:#2a2a4a;border-radius:3px;height:6px;margin-bottom:7px}
+.team-bar-fill{background:linear-gradient(90deg,#3b82f6,#6366f1);height:100%;border-radius:3px;transition:width .3s}
+.team-bar-fill.full{background:#4ade80}
+.empty{text-align:center;padding:30px;color:#888}
+.complete{text-align:center;padding:30px;color:#4ade80;font-size:22px}
+</style>
+</head>
+<body>
+<div id="header">
+  <div class="header-top">
+    <span style="font-size:28px">⚽</span>
+    <div><h1>Panini FIFA World Cup 2026™</h1><p>Gestionnaire de collection</p></div>
+  </div>
+  <div class="progress-box">
+    <div class="progress-nums">
+      <span style="color:#4ade80">✓ <span id="ownedCount">0</span> possédés</span>
+      <span style="color:#ffd700;font-weight:700"><span id="pct">0</span>%</span>
+      <span style="color:#f87171">✗ <span id="missingCount">0</span> manquants</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-label"><span id="ownedCount2">0</span> / <span id="totalCount">0</span> stickers • <span id="doublesCount">0</span> doubles</div>
+  </div>
+</div>
+<div id="tabs">
+  <button class="tab active" onclick="showTab('collection')">📋 Collection</button>
+  <button class="tab" onclick="showTab('manquants')" id="tab-manquants">❌ Manquants</button>
+  <button class="tab" onclick="showTab('doubles')" id="tab-doubles">🔄 Doubles</button>
+  <button class="tab" onclick="showTab('stats')">📊 Stats</button>
+</div>
+<div id="content"></div>
+<script>
+const STICKERS=[
+  {id:"00",name:"Logo Panini",team:"Intro",foil:true},
+  {id:"FWC1",name:"Emblème Officiel",team:"Intro",foil:true},
+  {id:"FWC2",name:"Emblème Officiel",team:"Intro",foil:true},
+  {id:"FWC3",name:"Mascotte Officielle",team:"Intro",foil:true},
+  {id:"FWC4",name:"Slogan Officiel",team:"Intro",foil:true},
+  {id:"FWC5",name:"Ballon Officiel",team:"Intro",foil:true},
+  {id:"FWC6",name:"Canada - Villes Hôtes",team:"Intro",foil:true},
+  {id:"FWC7",name:"Mexique - Villes Hôtes",team:"Intro",foil:true},
+  {id:"FWC8",name:"USA - Villes Hôtes",team:"Intro",foil:true},
+  {id:"FWC9",name:"Italie 1934",team:"FIFA Museum",foil:true},
+  {id:"FWC10",name:"Uruguay 1950",team:"FIFA Museum",foil:true},
+  {id:"FWC11",name:"Allemagne O. 1954",team:"FIFA Museum",foil:true},
+  {id:"FWC12",name:"Brésil 1962",team:"FIFA Museum",foil:true},
+  {id:"FWC13",name:"Allemagne O. 1974",team:"FIFA Museum",foil:true},
+  {id:"FWC14",name:"Argentine 1986",team:"FIFA Museum",foil:true},
+  {id:"FWC15",name:"Brésil 1994",team:"FIFA Museum",foil:true},
+  {id:"FWC16",name:"Brésil 2002",team:"FIFA Museum",foil:true},
+  {id:"FWC17",name:"Italie 2006",team:"FIFA Museum",foil:true},
+  {id:"FWC18",name:"Allemagne 2014",team:"FIFA Museum",foil:true},
+  {id:"FWC19",name:"Argentine 2022",team:"FIFA Museum",foil:true},
+  {id:"MEX1",name:"Logo Mexique",team:"A - Mexique",foil:true},
+  {id:"MEX2",name:"Luis Malagón",team:"A - Mexique"},
+  {id:"MEX3",name:"Johan Vasquez",team:"A - Mexique"},
+  {id:"MEX4",name:"Jorge Sánchez",team:"A - Mexique"},
+  {id:"MEX5",name:"Cesar Montes",team:"A - Mexique"},
+  {id:"MEX6",name:"Jesus Gallardo",team:"A - Mexique"},
+  {id:"MEX7",name:"Israel Reyes",team:"A - Mexique"},
+  {id:"MEX8",name:"Diego Lainez",team:"A - Mexique"},
+  {id:"MEX9",name:"Carlos Rodriguez",team:"A - Mexique"},
+  {id:"MEX10",name:"Edson Alvarez",team:"A - Mexique"},
+  {id:"MEX11",name:"Orbelin Pineda",team:"A - Mexique"},
+  {id:"MEX12",name:"Marcel Ruiz",team:"A - Mexique"},
+  {id:"MEX13",name:"Photo equipe",team:"A - Mexique"},
+  {id:"MEX14",name:"Érick Sánchez",team:"A - Mexique"},
+  {id:"MEX15",name:"Hirving Lozano",team:"A - Mexique"},
+  {id:"MEX16",name:"Santiago Giménez",team:"A - Mexique"},
+  {id:"MEX17",name:"Raúl Jiménez",team:"A - Mexique"},
+  {id:"MEX18",name:"Alexis Vega",team:"A - Mexique"},
+  {id:"MEX19",name:"Roberto Alvarado",team:"A - Mexique"},
+  {id:"MEX20",name:"Cesar Huerta",team:"A - Mexique"},
+  {id:"RSA1",name:"Logo Afrique du Sud",team:"A - Afrique du Sud",foil:true},
+  {id:"RSA2",name:"Ronwen Williams",team:"A - Afrique du Sud"},
+  {id:"RSA3",name:"Sipho Chaine",team:"A - Afrique du Sud"},
+  {id:"RSA4",name:"Aubrey Modiba",team:"A - Afrique du Sud"},
+  {id:"RSA5",name:"Samukele Kabini",team:"A - Afrique du Sud"},
+  {id:"RSA6",name:"Mbekezeli Mbokazi",team:"A - Afrique du Sud"},
+  {id:"RSA7",name:"Khulumani Ndamane",team:"A - Afrique du Sud"},
+  {id:"RSA8",name:"Siyabonga Ngezana",team:"A - Afrique du Sud"},
+  {id:"RSA9",name:"Khuliso Mudau",team:"A - Afrique du Sud"},
+  {id:"RSA10",name:"Nkosinathi Sibisi",team:"A - Afrique du Sud"},
+  {id:"RSA11",name:"Teboho Mokoena",team:"A - Afrique du Sud"},
+  {id:"RSA12",name:"Thalente Mbatha",team:"A - Afrique du Sud"},
+  {id:"RSA13",name:"Photo equipe",team:"A - Afrique du Sud"},
+  {id:"RSA14",name:"Bathasi Aubaas",team:"A - Afrique du Sud"},
+  {id:"RSA15",name:"Yaya Sithole",team:"A - Afrique du Sud"},
+  {id:"RSA16",name:"Sipho Mbule",team:"A - Afrique du Sud"},
+  {id:"RSA17",name:"Lyle Foster",team:"A - Afrique du Sud"},
+  {id:"RSA18",name:"Iqraam Rayners",team:"A - Afrique du Sud"},
+  {id:"RSA19",name:"Mohau Nkota",team:"A - Afrique du Sud"},
+  {id:"RSA20",name:"Oswin Appollis",team:"A - Afrique du Sud"},
+  {id:"KOR1",name:"Logo Corée du Sud",team:"A - Corée du Sud",foil:true},
+  {id:"KOR2",name:"Hyeon-woo Jo",team:"A - Corée du Sud"},
+  {id:"KOR3",name:"Seung-Gyu Kim",team:"A - Corée du Sud"},
+  {id:"KOR4",name:"Min-jae Kim",team:"A - Corée du Sud"},
+  {id:"KOR5",name:"Yu-min Cho",team:"A - Corée du Sud"},
+  {id:"KOR6",name:"Young-woo Seol",team:"A - Corée du Sud"},
+  {id:"KOR7",name:"Han-beom Lee",team:"A - Corée du Sud"},
+  {id:"KOR8",name:"Tae-seok Lee",team:"A - Corée du Sud"},
+  {id:"KOR9",name:"Myung-jae Lee",team:"A - Corée du Sud"},
+  {id:"KOR10",name:"Jae-sung Lee",team:"A - Corée du Sud"},
+  {id:"KOR11",name:"In-beom Hwang",team:"A - Corée du Sud"},
+  {id:"KOR12",name:"Kang-in Lee",team:"A - Corée du Sud"},
+  {id:"KOR13",name:"Photo equipe",team:"A - Corée du Sud"},
+  {id:"KOR14",name:"Seung-ho Paik",team:"A - Corée du Sud"},
+  {id:"KOR15",name:"Jens Castrop",team:"A - Corée du Sud"},
+  {id:"KOR16",name:"Dongg-yeong Lee",team:"A - Corée du Sud"},
+  {id:"KOR17",name:"Gue-sung Cho",team:"A - Corée du Sud"},
+  {id:"KOR18",name:"Heung-min Son",team:"A - Corée du Sud"},
+  {id:"KOR19",name:"Hee-chan Hwang",team:"A - Corée du Sud"},
+  {id:"KOR20",name:"Hyeon-Gyu Oh",team:"A - Corée du Sud"},
+  {id:"CZE1",name:"Logo Tchéquie",team:"A - Tchéquie",foil:true},
+  {id:"CZE2",name:"Matej Kovar",team:"A - Tchéquie"},
+  {id:"CZE3",name:"Jindrich Stanek",team:"A - Tchéquie"},
+  {id:"CZE4",name:"Ladislav Krejci",team:"A - Tchéquie"},
+  {id:"CZE5",name:"Vladimir Coufal",team:"A - Tchéquie"},
+  {id:"CZE6",name:"Jaroslav Zeleny",team:"A - Tchéquie"},
+  {id:"CZE7",name:"Tomas Holes",team:"A - Tchéquie"},
+  {id:"CZE8",name:"David Zima",team:"A - Tchéquie"},
+  {id:"CZE9",name:"Michal Sadilek",team:"A - Tchéquie"},
+  {id:"CZE10",name:"Lukas Provod",team:"A - Tchéquie"},
+  {id:"CZE11",name:"Lukas Cerv",team:"A - Tchéquie"},
+  {id:"CZE12",name:"Tomas Soucek",team:"A - Tchéquie"},
+  {id:"CZE13",name:"Photo equipe",team:"A - Tchéquie"},
+  {id:"CZE14",name:"Pavel Sulc",team:"A - Tchéquie"},
+  {id:"CZE15",name:"Matej Vydra",team:"A - Tchéquie"},
+  {id:"CZE16",name:"Vasil Kusej",team:"A - Tchéquie"},
+  {id:"CZE17",name:"Tomas Chory",team:"A - Tchéquie"},
+  {id:"CZE18",name:"Vaclav Cerny",team:"A - Tchéquie"},
+  {id:"CZE19",name:"Adam Hlozek",team:"A - Tchéquie"},
+  {id:"CZE20",name:"Patrik Schick",team:"A - Tchéquie"},
+  {id:"CAN1",name:"Logo Canada",team:"B - Canada",foil:true},
+  {id:"CAN2",name:"Dayne St.Clair",team:"B - Canada"},
+  {id:"CAN3",name:"Alphonso Davies",team:"B - Canada"},
+  {id:"CAN4",name:"Alistair Johnston",team:"B - Canada"},
+  {id:"CAN5",name:"Samuel Adekugbe",team:"B - Canada"},
+  {id:"CAN6",name:"Riche Larvea",team:"B - Canada"},
+  {id:"CAN7",name:"Derek Cornelius",team:"B - Canada"},
+  {id:"CAN8",name:"Moïse Bombito",team:"B - Canada"},
+  {id:"CAN9",name:"Kamal Miller",team:"B - Canada"},
+  {id:"CAN10",name:"Stephen Eustáquio",team:"B - Canada"},
+  {id:"CAN11",name:"Ismaël Koné",team:"B - Canada"},
+  {id:"CAN12",name:"Jonathan Osorio",team:"B - Canada"},
+  {id:"CAN13",name:"Photo equipe",team:"B - Canada"},
+  {id:"CAN14",name:"Jacob Shaffelburg",team:"B - Canada"},
+  {id:"CAN15",name:"Mathieu Choinière",team:"B - Canada"},
+  {id:"CAN16",name:"Niko Sigur",team:"B - Canada"},
+  {id:"CAN17",name:"Tajon Buchanan",team:"B - Canada"},
+  {id:"CAN18",name:"Liam Millar",team:"B - Canada"},
+  {id:"CAN19",name:"Cyle Larin",team:"B - Canada"},
+  {id:"CAN20",name:"Jonathan David",team:"B - Canada"},
+  {id:"BIH1",name:"Logo Bosnie-Herzégovine",team:"B - Bosnie-Herzégovine",foil:true},
+  {id:"BIH2",name:"Nikola Vasilj",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH3",name:"Amer Dedic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH4",name:"Sead Kolasinac",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH5",name:"Tarik Muharemovic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH6",name:"Nihad Mujakic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH7",name:"Nikola Katic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH8",name:"Amir Hadziahmetovic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH9",name:"Benjamin Tahirovic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH10",name:"Armin Gigovic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH11",name:"Ivan Sunjic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH12",name:"Ivan Basic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH13",name:"Photo equipe",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH14",name:"Dzenis Burnic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH15",name:"Esmir Bajraktarevic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH16",name:"Amar Memic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH17",name:"Ermedin Demirovic",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH18",name:"Edin Dzeko",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH19",name:"Samed Bazdar",team:"B - Bosnie-Herzégovine"},
+  {id:"BIH20",name:"Haris Tabakovic",team:"B - Bosnie-Herzégovine"},
+  {id:"QAT1",name:"Logo Qatar",team:"B - Qatar",foil:true},
+  {id:"QAT2",name:"Meshaal Barsham",team:"B - Qatar"},
+  {id:"QAT3",name:"Sultan Albrake",team:"B - Qatar"},
+  {id:"QAT4",name:"Lucas Mendes",team:"B - Qatar"},
+  {id:"QAT5",name:"Homam Ahmed",team:"B - Qatar"},
+  {id:"QAT6",name:"Boualem Khoukhi",team:"B - Qatar"},
+  {id:"QAT7",name:"Pedro Miguel",team:"B - Qatar"},
+  {id:"QAT8",name:"Tarek Salman",team:"B - Qatar"},
+  {id:"QAT9",name:"Mohamed Al-Mannai",team:"B - Qatar"},
+  {id:"QAT10",name:"Karim Boudiaf",team:"B - Qatar"},
+  {id:"QAT11",name:"Assim Madibo",team:"B - Qatar"},
+  {id:"QAT12",name:"Ahmed Fatehi",team:"B - Qatar"},
+  {id:"QAT13",name:"Photo equipe",team:"B - Qatar"},
+  {id:"QAT14",name:"Mohammed Waad",team:"B - Qatar"},
+  {id:"QAT15",name:"Abdulaziz Hatem",team:"B - Qatar"},
+  {id:"QAT16",name:"Hassan Al-Haydos",team:"B - Qatar"},
+  {id:"QAT17",name:"Edmilson Junior",team:"B - Qatar"},
+  {id:"QAT18",name:"Akram Hassan Afif",team:"B - Qatar"},
+  {id:"QAT19",name:"Ahmed Al Ganehi",team:"B - Qatar"},
+  {id:"QAT20",name:"Almoez Ali",team:"B - Qatar"},
+  {id:"SUI1",name:"Logo Suisse",team:"B - Suisse",foil:true},
+  {id:"SUI2",name:"Gregor Kobel",team:"B - Suisse"},
+  {id:"SUI3",name:"Yvon Mvogo",team:"B - Suisse"},
+  {id:"SUI4",name:"Manuel Akanji",team:"B - Suisse"},
+  {id:"SUI5",name:"Ricardo Rodriguez",team:"B - Suisse"},
+  {id:"SUI6",name:"Nico Elvedi",team:"B - Suisse"},
+  {id:"SUI7",name:"Aurèle Amenda",team:"B - Suisse"},
+  {id:"SUI8",name:"Silvan Widmer",team:"B - Suisse"},
+  {id:"SUI9",name:"Granit Xhaka",team:"B - Suisse"},
+  {id:"SUI10",name:"Denis Zakaria",team:"B - Suisse"},
+  {id:"SUI11",name:"Remo Freuler",team:"B - Suisse"},
+  {id:"SUI12",name:"Fabian Rieder",team:"B - Suisse"},
+  {id:"SUI13",name:"Photo equipe",team:"B - Suisse"},
+  {id:"SUI14",name:"Ardon Jashari",team:"B - Suisse"},
+  {id:"SUI15",name:"Johan Manzambi",team:"B - Suisse"},
+  {id:"SUI16",name:"Michel Aebischer",team:"B - Suisse"},
+  {id:"SUI17",name:"Breel Embolo",team:"B - Suisse"},
+  {id:"SUI18",name:"Ruben Vargas",team:"B - Suisse"},
+  {id:"SUI19",name:"Dan Ndoye",team:"B - Suisse"},
+  {id:"SUI20",name:"Zeki Amdouni",team:"B - Suisse"},
+  {id:"BRA1",name:"Logo Brésil",team:"C - Brésil",foil:true},
+  {id:"BRA2",name:"Alisson",team:"C - Brésil"},
+  {id:"BRA3",name:"Bento",team:"C - Brésil"},
+  {id:"BRA4",name:"Marquinhos",team:"C - Brésil"},
+  {id:"BRA5",name:"Éder Militão",team:"C - Brésil"},
+  {id:"BRA6",name:"Gabriel Magalhães",team:"C - Brésil"},
+  {id:"BRA7",name:"Danilo",team:"C - Brésil"},
+  {id:"BRA8",name:"Wesley",team:"C - Brésil"},
+  {id:"BRA9",name:"Lucas Paquetá",team:"C - Brésil"},
+  {id:"BRA10",name:"Casemiro",team:"C - Brésil"},
+  {id:"BRA11",name:"Bruno Guimarães",team:"C - Brésil"},
+  {id:"BRA12",name:"Luiz Henrique",team:"C - Brésil"},
+  {id:"BRA13",name:"Photo equipe",team:"C - Brésil"},
+  {id:"BRA14",name:"Vinicius Júnior",team:"C - Brésil"},
+  {id:"BRA15",name:"Rodrygo",team:"C - Brésil"},
+  {id:"BRA16",name:"João Pedro",team:"C - Brésil"},
+  {id:"BRA17",name:"Matheus Cunha",team:"C - Brésil"},
+  {id:"BRA18",name:"Gabriel Martinelli",team:"C - Brésil"},
+  {id:"BRA19",name:"Raphinha",team:"C - Brésil"},
+  {id:"BRA20",name:"Estévão",team:"C - Brésil"},
+  {id:"MAR1",name:"Logo Maroc",team:"C - Maroc",foil:true},
+  {id:"MAR2",name:"Yassine Bounou",team:"C - Maroc"},
+  {id:"MAR3",name:"Munir El Kajoui",team:"C - Maroc"},
+  {id:"MAR4",name:"Achraf Hakimi",team:"C - Maroc"},
+  {id:"MAR5",name:"Noussair Mazraoui",team:"C - Maroc"},
+  {id:"MAR6",name:"Nayef Aguerd",team:"C - Maroc"},
+  {id:"MAR7",name:"Roman Saiss",team:"C - Maroc"},
+  {id:"MAR8",name:"Jawad El Yamio",team:"C - Maroc"},
+  {id:"MAR9",name:"Adam Masina",team:"C - Maroc"},
+  {id:"MAR10",name:"Sofyan Amrabat",team:"C - Maroc"},
+  {id:"MAR11",name:"Azzedine Ounahi",team:"C - Maroc"},
+  {id:"MAR12",name:"Eliesse Ben Seghir",team:"C - Maroc"},
+  {id:"MAR13",name:"Photo equipe",team:"C - Maroc"},
+  {id:"MAR14",name:"Bilal El Khannouss",team:"C - Maroc"},
+  {id:"MAR15",name:"Ismael Saibari",team:"C - Maroc"},
+  {id:"MAR16",name:"Youssef En-Nesyri",team:"C - Maroc"},
+  {id:"MAR17",name:"Abde Ezzalzouli",team:"C - Maroc"},
+  {id:"MAR18",name:"Soufiane Rahimi",team:"C - Maroc"},
+  {id:"MAR19",name:"Brahim Diaz",team:"C - Maroc"},
+  {id:"MAR20",name:"Ayoub El Kaabi",team:"C - Maroc"},
+  {id:"HAI1",name:"Logo Haïti",team:"C - Haïti",foil:true},
+  {id:"HAI2",name:"Johny Placide",team:"C - Haïti"},
+  {id:"HAI3",name:"Carlens Arcus",team:"C - Haïti"},
+  {id:"HAI4",name:"Martin Expérience",team:"C - Haïti"},
+  {id:"HAI5",name:"Jean-Kevin Duverne",team:"C - Haïti"},
+  {id:"HAI6",name:"Ricardo Adé",team:"C - Haïti"},
+  {id:"HAI7",name:"Duke Lacroix",team:"C - Haïti"},
+  {id:"HAI8",name:"Garven Metusala",team:"C - Haïti"},
+  {id:"HAI9",name:"Hannes Delcroix",team:"C - Haïti"},
+  {id:"HAI10",name:"Leverton Pierre",team:"C - Haïti"},
+  {id:"HAI11",name:"Danley Jean Jacques",team:"C - Haïti"},
+  {id:"HAI12",name:"Jean-Ricner Bellegarde",team:"C - Haïti"},
+  {id:"HAI13",name:"Photo equipe",team:"C - Haïti"},
+  {id:"HAI14",name:"Christopher Attys",team:"C - Haïti"},
+  {id:"HAI15",name:"Derrick Etienne Jr",team:"C - Haïti"},
+  {id:"HAI16",name:"Josue Casimir",team:"C - Haïti"},
+  {id:"HAI17",name:"Ruben Providence",team:"C - Haïti"},
+  {id:"HAI18",name:"Duckens Nazon",team:"C - Haïti"},
+  {id:"HAI19",name:"Louicius Deedson",team:"C - Haïti"},
+  {id:"HAI20",name:"Frantzdy Pierrot",team:"C - Haïti"},
+  {id:"SCO1",name:"Logo Écosse",team:"C - Écosse",foil:true},
+  {id:"SCO2",name:"Angus Gunn",team:"C - Écosse"},
+  {id:"SCO3",name:"Jack Hendry",team:"C - Écosse"},
+  {id:"SCO4",name:"Kieran Tierney",team:"C - Écosse"},
+  {id:"SCO5",name:"Aaron Hickey",team:"C - Écosse"},
+  {id:"SCO6",name:"Andrew Robertson",team:"C - Écosse"},
+  {id:"SCO7",name:"Scott McKenna",team:"C - Écosse"},
+  {id:"SCO8",name:"John Souttar",team:"C - Écosse"},
+  {id:"SCO9",name:"Anthony Ralston",team:"C - Écosse"},
+  {id:"SCO10",name:"Grant Hanley",team:"C - Écosse"},
+  {id:"SCO11",name:"Scott McTominay",team:"C - Écosse"},
+  {id:"SCO12",name:"Billy Gilmour",team:"C - Écosse"},
+  {id:"SCO13",name:"Photo equipe",team:"C - Écosse"},
+  {id:"SCO14",name:"Lewis Ferguson",team:"C - Écosse"},
+  {id:"SCO15",name:"Ryan Christie",team:"C - Écosse"},
+  {id:"SCO16",name:"Kenny McLean",team:"C - Écosse"},
+  {id:"SCO17",name:"John McGinn",team:"C - Écosse"},
+  {id:"SCO18",name:"Lyndon Dykes",team:"C - Écosse"},
+  {id:"SCO19",name:"Che Adams",team:"C - Écosse"},
+  {id:"SCO20",name:"Ben Gannon-Doak",team:"C - Écosse"},
+  {id:"USA1",name:"Logo USA",team:"D - USA",foil:true},
+  {id:"USA2",name:"Matt Freese",team:"D - USA"},
+  {id:"USA3",name:"Chris Richards",team:"D - USA"},
+  {id:"USA4",name:"Tim Ream",team:"D - USA"},
+  {id:"USA5",name:"Mark McKenzie",team:"D - USA"},
+  {id:"USA6",name:"Alex Freeman",team:"D - USA"},
+  {id:"USA7",name:"Antonee Robinson",team:"D - USA"},
+  {id:"USA8",name:"Tyler Adams",team:"D - USA"},
+  {id:"USA9",name:"Tanner Tessmann",team:"D - USA"},
+  {id:"USA10",name:"Weston McKennie",team:"D - USA"},
+  {id:"USA11",name:"Christian Roldan",team:"D - USA"},
+  {id:"USA12",name:"Timothy Weah",team:"D - USA"},
+  {id:"USA13",name:"Photo equipe",team:"D - USA"},
+  {id:"USA14",name:"Diego Luna",team:"D - USA"},
+  {id:"USA15",name:"Malik Tillman",team:"D - USA"},
+  {id:"USA16",name:"Christian Pulisic",team:"D - USA"},
+  {id:"USA17",name:"Brenden Aaronson",team:"D - USA"},
+  {id:"USA18",name:"Ricardo Pepi",team:"D - USA"},
+  {id:"USA19",name:"Haji Wright",team:"D - USA"},
+  {id:"USA20",name:"Folarin Balogun",team:"D - USA"},
+  {id:"PAR1",name:"Logo Paraguay",team:"D - Paraguay",foil:true},
+  {id:"PAR2",name:"Roberto Fernandez",team:"D - Paraguay"},
+  {id:"PAR3",name:"Orlando Gill",team:"D - Paraguay"},
+  {id:"PAR4",name:"Gustavo Gomez",team:"D - Paraguay"},
+  {id:"PAR5",name:"Fabián Balbuena",team:"D - Paraguay"},
+  {id:"PAR6",name:"Juan José Cáceres",team:"D - Paraguay"},
+  {id:"PAR7",name:"Omar Alderete",team:"D - Paraguay"},
+  {id:"PAR8",name:"Junior Alonso",team:"D - Paraguay"},
+  {id:"PAR9",name:"Mathías Villasanti",team:"D - Paraguay"},
+  {id:"PAR10",name:"Diego Gomez",team:"D - Paraguay"},
+  {id:"PAR11",name:"Damián Bobadilla",team:"D - Paraguay"},
+  {id:"PAR12",name:"Andres Cubas",team:"D - Paraguay"},
+  {id:"PAR13",name:"Photo equipe",team:"D - Paraguay"},
+  {id:"PAR14",name:"Matias Galarza Fonda",team:"D - Paraguay"},
+  {id:"PAR15",name:"Julio Enciso",team:"D - Paraguay"},
+  {id:"PAR16",name:"Alejandro Romero Gamarra",team:"D - Paraguay"},
+  {id:"PAR17",name:"Miguel Almirón",team:"D - Paraguay"},
+  {id:"PAR18",name:"Ramon Sosa",team:"D - Paraguay"},
+  {id:"PAR19",name:"Angel Romero",team:"D - Paraguay"},
+  {id:"PAR20",name:"Antonio Sanabria",team:"D - Paraguay"},
+  {id:"AUS1",name:"Logo Australie",team:"D - Australie",foil:true},
+  {id:"AUS2",name:"Mathew Ryan",team:"D - Australie"},
+  {id:"AUS3",name:"Joe Gauci",team:"D - Australie"},
+  {id:"AUS4",name:"Harry Souttar",team:"D - Australie"},
+  {id:"AUS5",name:"Alessandro Circati",team:"D - Australie"},
+  {id:"AUS6",name:"Jordan Bos",team:"D - Australie"},
+  {id:"AUS7",name:"Aziz Behich",team:"D - Australie"},
+  {id:"AUS8",name:"Cameron Burgess",team:"D - Australie"},
+  {id:"AUS9",name:"Lewis Miller",team:"D - Australie"},
+  {id:"AUS10",name:"Milos Degenek",team:"D - Australie"},
+  {id:"AUS11",name:"Jackson Irvine",team:"D - Australie"},
+  {id:"AUS12",name:"Riley McGree",team:"D - Australie"},
+  {id:"AUS13",name:"Photo equipe",team:"D - Australie"},
+  {id:"AUS14",name:"Aiden O Neill",team:"D - Australie"},
+  {id:"AUS15",name:"Connor Metcalfe",team:"D - Australie"},
+  {id:"AUS16",name:"Patrick Yazbek",team:"D - Australie"},
+  {id:"AUS17",name:"Craig Goodwin",team:"D - Australie"},
+  {id:"AUS18",name:"Kusini Vengi",team:"D - Australie"},
+  {id:"AUS19",name:"Nestory Irankunda",team:"D - Australie"},
+  {id:"AUS20",name:"Mohamed Touré",team:"D - Australie"},
+  {id:"TUR1",name:"Logo Türkiye",team:"D - Türkiye",foil:true},
+  {id:"TUR2",name:"Ugurcan Cakir",team:"D - Türkiye"},
+  {id:"TUR3",name:"Mert Muldur",team:"D - Türkiye"},
+  {id:"TUR4",name:"Zeki Celik",team:"D - Türkiye"},
+  {id:"TUR5",name:"Abdulkerim Bardakci",team:"D - Türkiye"},
+  {id:"TUR6",name:"Caglar Soyuncu",team:"D - Türkiye"},
+  {id:"TUR7",name:"Merih Demiral",team:"D - Türkiye"},
+  {id:"TUR8",name:"Ferdi Kadioglu",team:"D - Türkiye"},
+  {id:"TUR9",name:"Kaan Ayhan",team:"D - Türkiye"},
+  {id:"TUR10",name:"Ismail Yuksek",team:"D - Türkiye"},
+  {id:"TUR11",name:"Hakan Calhanoglu",team:"D - Türkiye"},
+  {id:"TUR12",name:"Orkun Kokcu",team:"D - Türkiye"},
+  {id:"TUR13",name:"Photo equipe",team:"D - Türkiye"},
+  {id:"TUR14",name:"Arda Guler",team:"D - Türkiye"},
+  {id:"TUR15",name:"Irfan Can Kahveci",team:"D - Türkiye"},
+  {id:"TUR16",name:"Yunus Akgun",team:"D - Türkiye"},
+  {id:"TUR17",name:"Can Uzun",team:"D - Türkiye"},
+  {id:"TUR18",name:"Baris Alper Yilmaz",team:"D - Türkiye"},
+  {id:"TUR19",name:"Kerem Akturkoglu",team:"D - Türkiye"},
+  {id:"TUR20",name:"Kenan Yildiz",team:"D - Türkiye"},
+  {id:"GER1",name:"Logo Allemagne",team:"E - Allemagne",foil:true},
+  {id:"GER2",name:"Marc-André ter Stegen",team:"E - Allemagne"},
+  {id:"GER3",name:"Jonathan Tah",team:"E - Allemagne"},
+  {id:"GER4",name:"David Raum",team:"E - Allemagne"},
+  {id:"GER5",name:"Nico Schlotterbeck",team:"E - Allemagne"},
+  {id:"GER6",name:"Antonio Rüdiger",team:"E - Allemagne"},
+  {id:"GER7",name:"Waldemar Anton",team:"E - Allemagne"},
+  {id:"GER8",name:"Ridle Baku",team:"E - Allemagne"},
+  {id:"GER9",name:"Maximilian Mittelstadt",team:"E - Allemagne"},
+  {id:"GER10",name:"Joshua Kimmich",team:"E - Allemagne"},
+  {id:"GER11",name:"Florian Wirtz",team:"E - Allemagne"},
+  {id:"GER12",name:"Felix Nmecha",team:"E - Allemagne"},
+  {id:"GER13",name:"Photo equipe",team:"E - Allemagne"},
+  {id:"GER14",name:"Leon Goretzka",team:"E - Allemagne"},
+  {id:"GER15",name:"Jamal Musiala",team:"E - Allemagne"},
+  {id:"GER16",name:"Serge Gnabry",team:"E - Allemagne"},
+  {id:"GER17",name:"Kai Havertz",team:"E - Allemagne"},
+  {id:"GER18",name:"Leroy Sane",team:"E - Allemagne"},
+  {id:"GER19",name:"Karim Adeyemi",team:"E - Allemagne"},
+  {id:"GER20",name:"Nick Woltemade",team:"E - Allemagne"},
+  {id:"CUW1",name:"Logo Curaçao",team:"E - Curaçao",foil:true},
+  {id:"CUW2",name:"Eloy Room",team:"E - Curaçao"},
+  {id:"CUW3",name:"Armando Obispo",team:"E - Curaçao"},
+  {id:"CUW4",name:"Sherel Floranus",team:"E - Curaçao"},
+  {id:"CUW5",name:"Jurien Gaari",team:"E - Curaçao"},
+  {id:"CUW6",name:"Joshua Brenet",team:"E - Curaçao"},
+  {id:"CUW7",name:"Roshon Van Eijma",team:"E - Curaçao"},
+  {id:"CUW8",name:"Shurandy Sambo",team:"E - Curaçao"},
+  {id:"CUW9",name:"Livano Comenencia",team:"E - Curaçao"},
+  {id:"CUW10",name:"Godfried Roemeratoe",team:"E - Curaçao"},
+  {id:"CUW11",name:"Juninho Bacuna",team:"E - Curaçao"},
+  {id:"CUW12",name:"Leandro Bacuna",team:"E - Curaçao"},
+  {id:"CUW13",name:"Photo equipe",team:"E - Curaçao"},
+  {id:"CUW14",name:"Tahith Chong",team:"E - Curaçao"},
+  {id:"CUW15",name:"Kenji Gorre",team:"E - Curaçao"},
+  {id:"CUW16",name:"Jearl Margaritha",team:"E - Curaçao"},
+  {id:"CUW17",name:"Jurgen Locadia",team:"E - Curaçao"},
+  {id:"CUW18",name:"Jeremy Antonisse",team:"E - Curaçao"},
+  {id:"CUW19",name:"Gervane Kastaneer",team:"E - Curaçao"},
+  {id:"CUW20",name:"Sontje Hansen",team:"E - Curaçao"},
+  {id:"CIV1",name:"Logo Cote d Ivoire",team:"E - Cote d Ivoire",foil:true},
+  {id:"CIV2",name:"Yahia Fofana",team:"E - Cote d Ivoire"},
+  {id:"CIV3",name:"Ghislain Konan",team:"E - Cote d Ivoire"},
+  {id:"CIV4",name:"Wilfried Singo",team:"E - Cote d Ivoire"},
+  {id:"CIV5",name:"Odilon Kossounou",team:"E - Cote d Ivoire"},
+  {id:"CIV6",name:"Evan Ndicka",team:"E - Cote d Ivoire"},
+  {id:"CIV7",name:"Willy Boly",team:"E - Cote d Ivoire"},
+  {id:"CIV8",name:"Emmanuel Agbadou",team:"E - Cote d Ivoire"},
+  {id:"CIV9",name:"Ousmane Diomande",team:"E - Cote d Ivoire"},
+  {id:"CIV10",name:"Franck Kessie",team:"E - Cote d Ivoire"},
+  {id:"CIV11",name:"Seko Fofana",team:"E - Cote d Ivoire"},
+  {id:"CIV12",name:"Ibrahim Sangare",team:"E - Cote d Ivoire"},
+  {id:"CIV13",name:"Photo equipe",team:"E - Cote d Ivoire"},
+  {id:"CIV14",name:"Jean-Philippe Gbamin",team:"E - Cote d Ivoire"},
+  {id:"CIV15",name:"Amad Diallo",team:"E - Cote d Ivoire"},
+  {id:"CIV16",name:"Sébastien Haller",team:"E - Cote d Ivoire"},
+  {id:"CIV17",name:"Simon Adingra",team:"E - Cote d Ivoire"},
+  {id:"CIV18",name:"Yan Diomande",team:"E - Cote d Ivoire"},
+  {id:"CIV19",name:"Evann Guessand",team:"E - Cote d Ivoire"},
+  {id:"CIV20",name:"Oumar Diakite",team:"E - Cote d Ivoire"},
+  {id:"ECU1",name:"Logo Équateur",team:"E - Équateur",foil:true},
+  {id:"ECU2",name:"Hernán Galíndez",team:"E - Équateur"},
+  {id:"ECU3",name:"Gonzalo Valle",team:"E - Équateur"},
+  {id:"ECU4",name:"Piero Hincapié",team:"E - Équateur"},
+  {id:"ECU5",name:"Pervis Estupiñán",team:"E - Équateur"},
+  {id:"ECU6",name:"Willian Pacho",team:"E - Équateur"},
+  {id:"ECU7",name:"Ángelo Preciado",team:"E - Équateur"},
+  {id:"ECU8",name:"Joel Ordóñez",team:"E - Équateur"},
+  {id:"ECU9",name:"Moises Caicedo",team:"E - Équateur"},
+  {id:"ECU10",name:"Alan Franco",team:"E - Équateur"},
+  {id:"ECU11",name:"Kendry Paez",team:"E - Équateur"},
+  {id:"ECU12",name:"Pedro Vite",team:"E - Équateur"},
+  {id:"ECU13",name:"Photo equipe",team:"E - Équateur"},
+  {id:"ECU14",name:"John Veboah",team:"E - Équateur"},
+  {id:"ECU15",name:"Leonardo Campana",team:"E - Équateur"},
+  {id:"ECU16",name:"Gonzalo Plata",team:"E - Équateur"},
+  {id:"ECU17",name:"Nilson Angulo",team:"E - Équateur"},
+  {id:"ECU18",name:"Alan Minda",team:"E - Équateur"},
+  {id:"ECU19",name:"Kevin Rodriguez",team:"E - Équateur"},
+  {id:"ECU20",name:"Enner Valencia",team:"E - Équateur"},
+  {id:"NED1",name:"Logo Pays-Bas",team:"F - Pays-Bas",foil:true},
+  {id:"NED2",name:"Bart Verbruggen",team:"F - Pays-Bas"},
+  {id:"NED3",name:"Virgil van Dijk",team:"F - Pays-Bas"},
+  {id:"NED4",name:"Micky van de Ven",team:"F - Pays-Bas"},
+  {id:"NED5",name:"Jurrien Timber",team:"F - Pays-Bas"},
+  {id:"NED6",name:"Denzel Dumfries",team:"F - Pays-Bas"},
+  {id:"NED7",name:"Nathan Aké",team:"F - Pays-Bas"},
+  {id:"NED8",name:"Jeremie Frimpong",team:"F - Pays-Bas"},
+  {id:"NED9",name:"Jan Paul van Hecke",team:"F - Pays-Bas"},
+  {id:"NED10",name:"Tijjani Reijnders",team:"F - Pays-Bas"},
+  {id:"NED11",name:"Ryan Gravenberch",team:"F - Pays-Bas"},
+  {id:"NED12",name:"Teun Koopmeiners",team:"F - Pays-Bas"},
+  {id:"NED13",name:"Photo equipe",team:"F - Pays-Bas"},
+  {id:"NED14",name:"Frenkie de Jong",team:"F - Pays-Bas"},
+  {id:"NED15",name:"Xavi Simons",team:"F - Pays-Bas"},
+  {id:"NED16",name:"Justin Kluivert",team:"F - Pays-Bas"},
+  {id:"NED17",name:"Memphis Depay",team:"F - Pays-Bas"},
+  {id:"NED18",name:"Donyell Malen",team:"F - Pays-Bas"},
+  {id:"NED19",name:"Wout Weghorst",team:"F - Pays-Bas"},
+  {id:"NED20",name:"Cody Gakpo",team:"F - Pays-Bas"},
+  {id:"JPN1",name:"Logo Japon",team:"F - Japon",foil:true},
+  {id:"JPN2",name:"Zion Suzuki",team:"F - Japon"},
+  {id:"JPN3",name:"Henry Heroki Mochizuki",team:"F - Japon"},
+  {id:"JPN4",name:"Ayumu Seko",team:"F - Japon"},
+  {id:"JPN5",name:"Junnosuke Suzuki",team:"F - Japon"},
+  {id:"JPN6",name:"Shogo Taniguchi",team:"F - Japon"},
+  {id:"JPN7",name:"Tsuyoshi Watanabe",team:"F - Japon"},
+  {id:"JPN8",name:"Kaishu Sano",team:"F - Japon"},
+  {id:"JPN9",name:"Yuki Soma",team:"F - Japon"},
+  {id:"JPN10",name:"Ao Tanaka",team:"F - Japon"},
+  {id:"JPN11",name:"Daichi Kamada",team:"F - Japon"},
+  {id:"JPN12",name:"Takefusa Kubo",team:"F - Japon"},
+  {id:"JPN13",name:"Photo equipe",team:"F - Japon"},
+  {id:"JPN14",name:"Ritsu Doan",team:"F - Japon"},
+  {id:"JPN15",name:"Keito Nakamura",team:"F - Japon"},
+  {id:"JPN16",name:"Takumi Minamino",team:"F - Japon"},
+  {id:"JPN17",name:"Shuto Machino",team:"F - Japon"},
+  {id:"JPN18",name:"Junya Ito",team:"F - Japon"},
+  {id:"JPN19",name:"Koki Ogawa",team:"F - Japon"},
+  {id:"JPN20",name:"Ayase Ueda",team:"F - Japon"},
+  {id:"SWE1",name:"Logo Suède",team:"F - Suède",foil:true},
+  {id:"SWE2",name:"Victor Johansson",team:"F - Suède"},
+  {id:"SWE3",name:"Isak Hien",team:"F - Suède"},
+  {id:"SWE4",name:"Gabriel Gudmundsson",team:"F - Suède"},
+  {id:"SWE5",name:"Emil Holm",team:"F - Suède"},
+  {id:"SWE6",name:"Victor Nilsson Lindelöf",team:"F - Suède"},
+  {id:"SWE7",name:"Gustaf Lagerbielke",team:"F - Suède"},
+  {id:"SWE8",name:"Lucas Bergvall",team:"F - Suède"},
+  {id:"SWE9",name:"Hugo Larsson",team:"F - Suède"},
+  {id:"SWE10",name:"Jesper Karlström",team:"F - Suède"},
+  {id:"SWE11",name:"Yasin Ayari",team:"F - Suède"},
+  {id:"SWE12",name:"Mattias Svanberg",team:"F - Suède"},
+  {id:"SWE13",name:"Photo equipe",team:"F - Suède"},
+  {id:"SWE14",name:"Daniel Svensson",team:"F - Suède"},
+  {id:"SWE15",name:"Ken Sema",team:"F - Suède"},
+  {id:"SWE16",name:"Roony Bardghji",team:"F - Suède"},
+  {id:"SWE17",name:"Dejan Kulusevski",team:"F - Suède"},
+  {id:"SWE18",name:"Anthony Elanga",team:"F - Suède"},
+  {id:"SWE19",name:"Alexander Isak",team:"F - Suède"},
+  {id:"SWE20",name:"Viktor Gyökeres",team:"F - Suède"},
+  {id:"TUN1",name:"Logo Tunisie",team:"F - Tunisie",foil:true},
+  {id:"TUN2",name:"Bechir Ben Said",team:"F - Tunisie"},
+  {id:"TUN3",name:"Aymen Dahmen",team:"F - Tunisie"},
+  {id:"TUN4",name:"Yan Valery",team:"F - Tunisie"},
+  {id:"TUN5",name:"Montassar Talbi",team:"F - Tunisie"},
+  {id:"TUN6",name:"Yassine Meriah",team:"F - Tunisie"},
+  {id:"TUN7",name:"Ali Abdi",team:"F - Tunisie"},
+  {id:"TUN8",name:"Dylan Bronn",team:"F - Tunisie"},
+  {id:"TUN9",name:"Ellyes Skhiri",team:"F - Tunisie"},
+  {id:"TUN10",name:"Aissa Laidouni",team:"F - Tunisie"},
+  {id:"TUN11",name:"Ferjani Sassi",team:"F - Tunisie"},
+  {id:"TUN12",name:"Mohamed Ali Ben Romdhane",team:"F - Tunisie"},
+  {id:"TUN13",name:"Photo equipe",team:"F - Tunisie"},
+  {id:"TUN14",name:"Hannibal Mejbri",team:"F - Tunisie"},
+  {id:"TUN15",name:"Elias Achouri",team:"F - Tunisie"},
+  {id:"TUN16",name:"Elias Saad",team:"F - Tunisie"},
+  {id:"TUN17",name:"Hazem Mastouri",team:"F - Tunisie"},
+  {id:"TUN18",name:"Ismael Gharbi",team:"F - Tunisie"},
+  {id:"TUN19",name:"Sayfallah Ltaief",team:"F - Tunisie"},
+  {id:"TUN20",name:"Naim Sliti",team:"F - Tunisie"},
+  {id:"BEL1",name:"Logo Belgique",team:"G - Belgique",foil:true},
+  {id:"BEL2",name:"Thibaut Courtois",team:"G - Belgique"},
+  {id:"BEL3",name:"Arthur Theate",team:"G - Belgique"},
+  {id:"BEL4",name:"Timothy Castagne",team:"G - Belgique"},
+  {id:"BEL5",name:"Zeno Debast",team:"G - Belgique"},
+  {id:"BEL6",name:"Brandon Mechele",team:"G - Belgique"},
+  {id:"BEL7",name:"Maxim De Cuyper",team:"G - Belgique"},
+  {id:"BEL8",name:"Thomas Meunier",team:"G - Belgique"},
+  {id:"BEL9",name:"Youri Tielemans",team:"G - Belgique"},
+  {id:"BEL10",name:"Amadou Onana",team:"G - Belgique"},
+  {id:"BEL11",name:"Nicolas Raskin",team:"G - Belgique"},
+  {id:"BEL12",name:"Alexis Saelemaekers",team:"G - Belgique"},
+  {id:"BEL13",name:"Photo equipe",team:"G - Belgique"},
+  {id:"BEL14",name:"Hans Vanaken",team:"G - Belgique"},
+  {id:"BEL15",name:"Kevin De Bruyne",team:"G - Belgique"},
+  {id:"BEL16",name:"Jérémy Doku",team:"G - Belgique"},
+  {id:"BEL17",name:"Charles De Ketelaere",team:"G - Belgique"},
+  {id:"BEL18",name:"Leandro Trossard",team:"G - Belgique"},
+  {id:"BEL19",name:"Loïs Openda",team:"G - Belgique"},
+  {id:"BEL20",name:"Romelu Lukaku",team:"G - Belgique"},
+  {id:"EGY1",name:"Logo Égypte",team:"G - Égypte",foil:true},
+  {id:"EGY2",name:"Mohamed El Shenawy",team:"G - Égypte"},
+  {id:"EGY3",name:"Mohamed Hany",team:"G - Égypte"},
+  {id:"EGY4",name:"Mohamed Hamdy",team:"G - Égypte"},
+  {id:"EGY5",name:"Yasser Ibrahim",team:"G - Égypte"},
+  {id:"EGY6",name:"Khaled Sobhi",team:"G - Égypte"},
+  {id:"EGY7",name:"Ramy Rabia",team:"G - Égypte"},
+  {id:"EGY8",name:"Hossam Abdelmaguid",team:"G - Égypte"},
+  {id:"EGY9",name:"Ahmed Fatouh",team:"G - Égypte"},
+  {id:"EGY10",name:"Marwan Attia",team:"G - Égypte"},
+  {id:"EGY11",name:"Zizo",team:"G - Égypte"},
+  {id:"EGY12",name:"Hamdy Fathy",team:"G - Égypte"},
+  {id:"EGY13",name:"Photo equipe",team:"G - Égypte"},
+  {id:"EGY14",name:"Mohamed Lasheen",team:"G - Égypte"},
+  {id:"EGY15",name:"Emam Ashour",team:"G - Égypte"},
+  {id:"EGY16",name:"Osama Faisal",team:"G - Égypte"},
+  {id:"EGY17",name:"Mohamed Salah",team:"G - Égypte"},
+  {id:"EGY18",name:"Mostafa Mohamed",team:"G - Égypte"},
+  {id:"EGY19",name:"Trezeguet",team:"G - Égypte"},
+  {id:"EGY20",name:"Omar Marmoush",team:"G - Égypte"},
+  {id:"IRN1",name:"Logo Iran",team:"G - Iran",foil:true},
+  {id:"IRN2",name:"Alireza Beiranvand",team:"G - Iran"},
+  {id:"IRN3",name:"Morteza Pouraliganji",team:"G - Iran"},
+  {id:"IRN4",name:"Ehsan Hajsafi",team:"G - Iran"},
+  {id:"IRN5",name:"Milad Mohammadi",team:"G - Iran"},
+  {id:"IRN6",name:"Shojae Khalilzadeh",team:"G - Iran"},
+  {id:"IRN7",name:"Ramin Rezaeian",team:"G - Iran"},
+  {id:"IRN8",name:"Hossein Kanaani",team:"G - Iran"},
+  {id:"IRN9",name:"Sadegh Moharrami",team:"G - Iran"},
+  {id:"IRN10",name:"Saleh Hardani",team:"G - Iran"},
+  {id:"IRN11",name:"Saeed Ezatolahi",team:"G - Iran"},
+  {id:"IRN12",name:"Saman Ghoddos",team:"G - Iran"},
+  {id:"IRN13",name:"Photo equipe",team:"G - Iran"},
+  {id:"IRN14",name:"Omid Noorafkan",team:"G - Iran"},
+  {id:"IRN15",name:"Roozbeh Cheshmi",team:"G - Iran"},
+  {id:"IRN16",name:"Mohammad Mohebi",team:"G - Iran"},
+  {id:"IRN17",name:"Sardar Azmoun",team:"G - Iran"},
+  {id:"IRN18",name:"Mehdi Taremi",team:"G - Iran"},
+  {id:"IRN19",name:"Alireza Jahanbakhsh",team:"G - Iran"},
+  {id:"IRN20",name:"Ali Gholizadeh",team:"G - Iran"},
+  {id:"NZL1",name:"Logo Nouvelle-Zélande",team:"G - Nouvelle-Zélande",foil:true},
+  {id:"NZL2",name:"Max Crocombe Payne",team:"G - Nouvelle-Zélande"},
+  {id:"NZL3",name:"Alex Paulsen",team:"G - Nouvelle-Zélande"},
+  {id:"NZL4",name:"Michael Boxall",team:"G - Nouvelle-Zélande"},
+  {id:"NZL5",name:"Liberato Cacace",team:"G - Nouvelle-Zélande"},
+  {id:"NZL6",name:"Tim Payne",team:"G - Nouvelle-Zélande"},
+  {id:"NZL7",name:"Tyler Bindon",team:"G - Nouvelle-Zélande"},
+  {id:"NZL8",name:"Francis de Vries",team:"G - Nouvelle-Zélande"},
+  {id:"NZL9",name:"Finn Surman",team:"G - Nouvelle-Zélande"},
+  {id:"NZL10",name:"Joe Bell",team:"G - Nouvelle-Zélande"},
+  {id:"NZL11",name:"Sarpreet Singh",team:"G - Nouvelle-Zélande"},
+  {id:"NZL12",name:"Ryan Thomas",team:"G - Nouvelle-Zélande"},
+  {id:"NZL13",name:"Photo equipe",team:"G - Nouvelle-Zélande"},
+  {id:"NZL14",name:"Matthew Garbett",team:"G - Nouvelle-Zélande"},
+  {id:"NZL15",name:"Marko Stamenić",team:"G - Nouvelle-Zélande"},
+  {id:"NZL16",name:"Ben Old",team:"G - Nouvelle-Zélande"},
+  {id:"NZL17",name:"Chris Wood",team:"G - Nouvelle-Zélande"},
+  {id:"NZL18",name:"Elijah Just",team:"G - Nouvelle-Zélande"},
+  {id:"NZL19",name:"Callum McCowatt",team:"G - Nouvelle-Zélande"},
+  {id:"NZL20",name:"Kosta Barbarouses",team:"G - Nouvelle-Zélande"},
+  {id:"ESP1",name:"Logo Espagne",team:"H - Espagne",foil:true},
+  {id:"ESP2",name:"Unai Simon",team:"H - Espagne"},
+  {id:"ESP3",name:"Robin Le Normand",team:"H - Espagne"},
+  {id:"ESP4",name:"Aymeric Laporte",team:"H - Espagne"},
+  {id:"ESP5",name:"Dean Huijsen",team:"H - Espagne"},
+  {id:"ESP6",name:"Pedro Porro",team:"H - Espagne"},
+  {id:"ESP7",name:"Dani Carvajal",team:"H - Espagne"},
+  {id:"ESP8",name:"Marc Cucurella",team:"H - Espagne"},
+  {id:"ESP9",name:"Martín Zubimendi",team:"H - Espagne"},
+  {id:"ESP10",name:"Rodri",team:"H - Espagne"},
+  {id:"ESP11",name:"Pedri",team:"H - Espagne"},
+  {id:"ESP12",name:"Fabian Ruiz",team:"H - Espagne"},
+  {id:"ESP13",name:"Photo equipe",team:"H - Espagne"},
+  {id:"ESP14",name:"Mikel Merino",team:"H - Espagne"},
+  {id:"ESP15",name:"Lamine Yamal",team:"H - Espagne"},
+  {id:"ESP16",name:"Dani Olmo",team:"H - Espagne"},
+  {id:"ESP17",name:"Nico Williams",team:"H - Espagne"},
+  {id:"ESP18",name:"Ferran Torres",team:"H - Espagne"},
+  {id:"ESP19",name:"Álvaro Morata",team:"H - Espagne"},
+  {id:"ESP20",name:"Mikel Oyarzabal",team:"H - Espagne"},
+  {id:"CPV1",name:"Logo Cap-Vert",team:"H - Cap-Vert",foil:true},
+  {id:"CPV2",name:"Vozinha",team:"H - Cap-Vert"},
+  {id:"CPV3",name:"Logan Costa",team:"H - Cap-Vert"},
+  {id:"CPV4",name:"Pico",team:"H - Cap-Vert"},
+  {id:"CPV5",name:"Diney",team:"H - Cap-Vert"},
+  {id:"CPV6",name:"Steven Moreira",team:"H - Cap-Vert"},
+  {id:"CPV7",name:"Wagner Pina",team:"H - Cap-Vert"},
+  {id:"CPV8",name:"Joao Paulo",team:"H - Cap-Vert"},
+  {id:"CPV9",name:"Yannick Semedo",team:"H - Cap-Vert"},
+  {id:"CPV10",name:"Kevin Pina",team:"H - Cap-Vert"},
+  {id:"CPV11",name:"Patrick Andrade",team:"H - Cap-Vert"},
+  {id:"CPV12",name:"Jamiro Monteiro",team:"H - Cap-Vert"},
+  {id:"CPV13",name:"Photo equipe",team:"H - Cap-Vert"},
+  {id:"CPV14",name:"Deroy Duarte",team:"H - Cap-Vert"},
+  {id:"CPV15",name:"Garry Rodrigues",team:"H - Cap-Vert"},
+  {id:"CPV16",name:"Jovane Cabral",team:"H - Cap-Vert"},
+  {id:"CPV17",name:"Ryan Mendes",team:"H - Cap-Vert"},
+  {id:"CPV18",name:"Dailon Livramento",team:"H - Cap-Vert"},
+  {id:"CPV19",name:"Willy Semedo",team:"H - Cap-Vert"},
+  {id:"CPV20",name:"Bebe",team:"H - Cap-Vert"},
+  {id:"KSA1",name:"Logo Arabie Saoudite",team:"H - Arabie Saoudite",foil:true},
+  {id:"KSA2",name:"Nawaf Alaqidi",team:"H - Arabie Saoudite"},
+  {id:"KSA3",name:"Abdulrahman Al-Sanbi",team:"H - Arabie Saoudite"},
+  {id:"KSA4",name:"Saud Abdulhamid",team:"H - Arabie Saoudite"},
+  {id:"KSA5",name:"Nawaf Bouwashl",team:"H - Arabie Saoudite"},
+  {id:"KSA6",name:"Jihad Thakri",team:"H - Arabie Saoudite"},
+  {id:"KSA7",name:"Moteb Al-Harbi",team:"H - Arabie Saoudite"},
+  {id:"KSA8",name:"Hassan Altambakti",team:"H - Arabie Saoudite"},
+  {id:"KSA9",name:"Musab Aljuwayr",team:"H - Arabie Saoudite"},
+  {id:"KSA10",name:"Ziyad Aljohani",team:"H - Arabie Saoudite"},
+  {id:"KSA11",name:"Abdullah Alkhaibari",team:"H - Arabie Saoudite"},
+  {id:"KSA12",name:"Nasser Aldawsari",team:"H - Arabie Saoudite"},
+  {id:"KSA13",name:"Photo equipe",team:"H - Arabie Saoudite"},
+  {id:"KSA14",name:"Saleh Abu Alshamat",team:"H - Arabie Saoudite"},
+  {id:"KSA15",name:"Marwan Alsahafi",team:"H - Arabie Saoudite"},
+  {id:"KSA16",name:"Salem Aldawsari",team:"H - Arabie Saoudite"},
+  {id:"KSA17",name:"Abdulrahman Al-Aboud",team:"H - Arabie Saoudite"},
+  {id:"KSA18",name:"Feras Akbrikan",team:"H - Arabie Saoudite"},
+  {id:"KSA19",name:"Saleh Alshehri",team:"H - Arabie Saoudite"},
+  {id:"KSA20",name:"Abdullah Al-Hamdan",team:"H - Arabie Saoudite"},
+  {id:"URU1",name:"Logo Uruguay",team:"H - Uruguay",foil:true},
+  {id:"URU2",name:"Sergio Rochet",team:"H - Uruguay"},
+  {id:"URU3",name:"Santiago Mele",team:"H - Uruguay"},
+  {id:"URU4",name:"Ronald Araujo",team:"H - Uruguay"},
+  {id:"URU5",name:"José María Giménez",team:"H - Uruguay"},
+  {id:"URU6",name:"Sebastian Caceres",team:"H - Uruguay"},
+  {id:"URU7",name:"Mathias Olivera",team:"H - Uruguay"},
+  {id:"URU8",name:"Guillermo Varela",team:"H - Uruguay"},
+  {id:"URU9",name:"Nahitan Nandez",team:"H - Uruguay"},
+  {id:"URU10",name:"Federico Valverde",team:"H - Uruguay"},
+  {id:"URU11",name:"Giorgian De Arrascaeta",team:"H - Uruguay"},
+  {id:"URU12",name:"Rodrigo Bentancur",team:"H - Uruguay"},
+  {id:"URU13",name:"Photo equipe",team:"H - Uruguay"},
+  {id:"URU14",name:"Manuel Ugarte",team:"H - Uruguay"},
+  {id:"URU15",name:"Nicolás de la Cruz",team:"H - Uruguay"},
+  {id:"URU16",name:"Maxi Araujo",team:"H - Uruguay"},
+  {id:"URU17",name:"Darwin Núñez",team:"H - Uruguay"},
+  {id:"URU18",name:"Federico Viñas",team:"H - Uruguay"},
+  {id:"URU19",name:"Rodrigo Aguirre",team:"H - Uruguay"},
+  {id:"URU20",name:"Facundo Pellistri",team:"H - Uruguay"},
+  {id:"FRA1",name:"Logo France",team:"I - France",foil:true},
+  {id:"FRA2",name:"Mike Maignan",team:"I - France"},
+  {id:"FRA3",name:"Theo Hernandez",team:"I - France"},
+  {id:"FRA4",name:"William Saliba",team:"I - France"},
+  {id:"FRA5",name:"Jules Kounde",team:"I - France"},
+  {id:"FRA6",name:"Ibrahima Konate",team:"I - France"},
+  {id:"FRA7",name:"Dayot Upamecano",team:"I - France"},
+  {id:"FRA8",name:"Lucas Digne",team:"I - France"},
+  {id:"FRA9",name:"Aurélien Tchouaméni",team:"I - France"},
+  {id:"FRA10",name:"Eduardo Camavinga",team:"I - France"},
+  {id:"FRA11",name:"Manu Kone",team:"I - France"},
+  {id:"FRA12",name:"Adrien Rabiot",team:"I - France"},
+  {id:"FRA13",name:"Photo equipe",team:"I - France"},
+  {id:"FRA14",name:"Michael Olise",team:"I - France"},
+  {id:"FRA15",name:"Ousmane Dembele",team:"I - France"},
+  {id:"FRA16",name:"Bradley Barcola",team:"I - France"},
+  {id:"FRA17",name:"Désiré Doué",team:"I - France"},
+  {id:"FRA18",name:"Kingsley Coman",team:"I - France"},
+  {id:"FRA19",name:"Hugo Ekitike",team:"I - France"},
+  {id:"FRA20",name:"Kylian Mbappé",team:"I - France"},
+  {id:"SEN1",name:"Logo Sénégal",team:"I - Sénégal",foil:true},
+  {id:"SEN2",name:"Edouard Mendy",team:"I - Sénégal"},
+  {id:"SEN3",name:"Yehvann Diouf",team:"I - Sénégal"},
+  {id:"SEN4",name:"Moussa Niakhaté",team:"I - Sénégal"},
+  {id:"SEN5",name:"Abdoulaye Seck",team:"I - Sénégal"},
+  {id:"SEN6",name:"Ismail Jakobs",team:"I - Sénégal"},
+  {id:"SEN7",name:"El Hadji Malick Diouf",team:"I - Sénégal"},
+  {id:"SEN8",name:"Kalidou Koulibaly",team:"I - Sénégal"},
+  {id:"SEN9",name:"Idrissa Gana Gueye",team:"I - Sénégal"},
+  {id:"SEN10",name:"Pape Matar Sarr",team:"I - Sénégal"},
+  {id:"SEN11",name:"Pape Gueye",team:"I - Sénégal"},
+  {id:"SEN12",name:"Habib Diarra",team:"I - Sénégal"},
+  {id:"SEN13",name:"Photo equipe",team:"I - Sénégal"},
+  {id:"SEN14",name:"Lamine Camara",team:"I - Sénégal"},
+  {id:"SEN15",name:"Sadio Mane",team:"I - Sénégal"},
+  {id:"SEN16",name:"Ismaïla Sarr",team:"I - Sénégal"},
+  {id:"SEN17",name:"Boulaye Dia",team:"I - Sénégal"},
+  {id:"SEN18",name:"Iliman Ndiaye",team:"I - Sénégal"},
+  {id:"SEN19",name:"Nicolas Jackson",team:"I - Sénégal"},
+  {id:"SEN20",name:"Krepin Diatta",team:"I - Sénégal"},
+  {id:"IRQ1",name:"Logo Irak",team:"I - Irak",foil:true},
+  {id:"IRQ2",name:"Jalal Hassan",team:"I - Irak"},
+  {id:"IRQ3",name:"Rebin Sulaka",team:"I - Irak"},
+  {id:"IRQ4",name:"Hussein Ali",team:"I - Irak"},
+  {id:"IRQ5",name:"Akam Hashem",team:"I - Irak"},
+  {id:"IRQ6",name:"Merchas Doski",team:"I - Irak"},
+  {id:"IRQ7",name:"Zaid Tahseen",team:"I - Irak"},
+  {id:"IRQ8",name:"Manaf Younis",team:"I - Irak"},
+  {id:"IRQ9",name:"Zidane Iqbal",team:"I - Irak"},
+  {id:"IRQ10",name:"Amir Al-Ammari",team:"I - Irak"},
+  {id:"IRQ11",name:"Ibrahim Bavesh",team:"I - Irak"},
+  {id:"IRQ12",name:"Ali Jasim",team:"I - Irak"},
+  {id:"IRQ13",name:"Photo equipe",team:"I - Irak"},
+  {id:"IRQ14",name:"Youssef Amyn",team:"I - Irak"},
+  {id:"IRQ15",name:"Aimar Sher",team:"I - Irak"},
+  {id:"IRQ16",name:"Marko Farji",team:"I - Irak"},
+  {id:"IRQ17",name:"Osama Rashid",team:"I - Irak"},
+  {id:"IRQ18",name:"Ali Al-Hamadi",team:"I - Irak"},
+  {id:"IRQ19",name:"Aymen Hussein",team:"I - Irak"},
+  {id:"IRQ20",name:"Mohanad Ali",team:"I - Irak"},
+  {id:"NOR1",name:"Logo Norvège",team:"I - Norvège",foil:true},
+  {id:"NOR2",name:"Orjan Nyland",team:"I - Norvège"},
+  {id:"NOR3",name:"Julian Ryerson",team:"I - Norvège"},
+  {id:"NOR4",name:"Leo Ostigård",team:"I - Norvège"},
+  {id:"NOR5",name:"Kristoffer Vassbakk Ajer",team:"I - Norvège"},
+  {id:"NOR6",name:"Marcus Holmgren Pedersen",team:"I - Norvège"},
+  {id:"NOR7",name:"David Møller Wolfe",team:"I - Norvège"},
+  {id:"NOR8",name:"Torbjørn Heggem",team:"I - Norvège"},
+  {id:"NOR9",name:"Morten Thorsby",team:"I - Norvège"},
+  {id:"NOR10",name:"Martin Ødegaard",team:"I - Norvège"},
+  {id:"NOR11",name:"Sander Berge",team:"I - Norvège"},
+  {id:"NOR12",name:"Andreas Schjelderup",team:"I - Norvège"},
+  {id:"NOR13",name:"Photo equipe",team:"I - Norvège"},
+  {id:"NOR14",name:"Patrick Berg",team:"I - Norvège"},
+  {id:"NOR15",name:"Erling Haaland",team:"I - Norvège"},
+  {id:"NOR16",name:"Alexander Sørloth",team:"I - Norvège"},
+  {id:"NOR17",name:"Aron Dønnum",team:"I - Norvège"},
+  {id:"NOR18",name:"Jorgen Strand Larsen",team:"I - Norvège"},
+  {id:"NOR19",name:"Antonio Nusa",team:"I - Norvège"},
+  {id:"NOR20",name:"Oscar Bobb",team:"I - Norvège"},
+  {id:"ARG1",name:"Logo Argentine",team:"J - Argentine",foil:true},
+  {id:"ARG2",name:"Emiliano Martinez",team:"J - Argentine"},
+  {id:"ARG3",name:"Nahuel Molina",team:"J - Argentine"},
+  {id:"ARG4",name:"Cristian Romero",team:"J - Argentine"},
+  {id:"ARG5",name:"Nicolas Otamendi",team:"J - Argentine"},
+  {id:"ARG6",name:"Nicolas Tagliafico",team:"J - Argentine"},
+  {id:"ARG7",name:"Leonardo Balerdi",team:"J - Argentine"},
+  {id:"ARG8",name:"Enzo Fernandez",team:"J - Argentine"},
+  {id:"ARG9",name:"Alexis Mac Allister",team:"J - Argentine"},
+  {id:"ARG10",name:"Rodrigo De Paul",team:"J - Argentine"},
+  {id:"ARG11",name:"Exequiel Palacios",team:"J - Argentine"},
+  {id:"ARG12",name:"Leandro Paredes",team:"J - Argentine"},
+  {id:"ARG13",name:"Photo equipe",team:"J - Argentine"},
+  {id:"ARG14",name:"Nico Paz",team:"J - Argentine"},
+  {id:"ARG15",name:"Franco Mastantuono",team:"J - Argentine"},
+  {id:"ARG16",name:"Nico Gonzalez",team:"J - Argentine"},
+  {id:"ARG17",name:"Lionel Messi",team:"J - Argentine"},
+  {id:"ARG18",name:"Lautaro Martinez",team:"J - Argentine"},
+  {id:"ARG19",name:"Julian Alvarez",team:"J - Argentine"},
+  {id:"ARG20",name:"Giuliano Simeone",team:"J - Argentine"},
+  {id:"ALG1",name:"Logo Algérie",team:"J - Algérie",foil:true},
+  {id:"ALG2",name:"Alexis Guendouz",team:"J - Algérie"},
+  {id:"ALG3",name:"Ramy Bensebaini",team:"J - Algérie"},
+  {id:"ALG4",name:"Youcef Atal",team:"J - Algérie"},
+  {id:"ALG5",name:"Rayan Aït-Nouri",team:"J - Algérie"},
+  {id:"ALG6",name:"Mohamed Amine Tougai",team:"J - Algérie"},
+  {id:"ALG7",name:"Aïssa Mandi",team:"J - Algérie"},
+  {id:"ALG8",name:"Ismael Bennacer",team:"J - Algérie"},
+  {id:"ALG9",name:"Houssem Aquar",team:"J - Algérie"},
+  {id:"ALG10",name:"Hicham Boudaoui",team:"J - Algérie"},
+  {id:"ALG11",name:"Ramiz Zerrouki",team:"J - Algérie"},
+  {id:"ALG12",name:"Nabil Bentalab",team:"J - Algérie"},
+  {id:"ALG13",name:"Photo equipe",team:"J - Algérie"},
+  {id:"ALG14",name:"Farés Chaibi",team:"J - Algérie"},
+  {id:"ALG15",name:"Riyad Mahrez",team:"J - Algérie"},
+  {id:"ALG16",name:"Said Benrahma",team:"J - Algérie"},
+  {id:"ALG17",name:"Anis Hadj Moussa",team:"J - Algérie"},
+  {id:"ALG18",name:"Amine Gouiri",team:"J - Algérie"},
+  {id:"ALG19",name:"Baghdad Bounedjah",team:"J - Algérie"},
+  {id:"ALG20",name:"Mohammed Amoura",team:"J - Algérie"},
+  {id:"AUT1",name:"Logo Autriche",team:"J - Autriche",foil:true},
+  {id:"AUT2",name:"Alexander Schlager",team:"J - Autriche"},
+  {id:"AUT3",name:"Patrick Pentz",team:"J - Autriche"},
+  {id:"AUT4",name:"David Alaba",team:"J - Autriche"},
+  {id:"AUT5",name:"Kevin Danso",team:"J - Autriche"},
+  {id:"AUT6",name:"Philipp Lienhart",team:"J - Autriche"},
+  {id:"AUT7",name:"Stefan Posch",team:"J - Autriche"},
+  {id:"AUT8",name:"Phillipp Mwene",team:"J - Autriche"},
+  {id:"AUT9",name:"Alexander Prass",team:"J - Autriche"},
+  {id:"AUT10",name:"Xaver Schlager",team:"J - Autriche"},
+  {id:"AUT11",name:"Marcel Sabitzer",team:"J - Autriche"},
+  {id:"AUT12",name:"Konrad Laimer",team:"J - Autriche"},
+  {id:"AUT13",name:"Photo equipe",team:"J - Autriche"},
+  {id:"AUT14",name:"Florian Grillitsch",team:"J - Autriche"},
+  {id:"AUT15",name:"Nicolas Seiwald",team:"J - Autriche"},
+  {id:"AUT16",name:"Romano Schmid",team:"J - Autriche"},
+  {id:"AUT17",name:"Patrick Wimmer",team:"J - Autriche"},
+  {id:"AUT18",name:"Christoph Baumgartner",team:"J - Autriche"},
+  {id:"AUT19",name:"Michael Gregoritsch",team:"J - Autriche"},
+  {id:"AUT20",name:"Marko Arnautović",team:"J - Autriche"},
+  {id:"JOR1",name:"Logo Jordanie",team:"J - Jordanie",foil:true},
+  {id:"JOR2",name:"Yazeed Abulaila",team:"J - Jordanie"},
+  {id:"JOR3",name:"Ihsan Haddad",team:"J - Jordanie"},
+  {id:"JOR4",name:"Mohammad Abu Hashish",team:"J - Jordanie"},
+  {id:"JOR5",name:"Yazan Al-Arab",team:"J - Jordanie"},
+  {id:"JOR6",name:"Abdallah Nasib",team:"J - Jordanie"},
+  {id:"JOR7",name:"Saleem Obaid",team:"J - Jordanie"},
+  {id:"JOR8",name:"Mohammad Abualnadi",team:"J - Jordanie"},
+  {id:"JOR9",name:"Ibrahim Saadeh",team:"J - Jordanie"},
+  {id:"JOR10",name:"Nizar Al-Rashdan",team:"J - Jordanie"},
+  {id:"JOR11",name:"Noor Al-Rawabdeh",team:"J - Jordanie"},
+  {id:"JOR12",name:"Mohannad Abu Taha",team:"J - Jordanie"},
+  {id:"JOR13",name:"Photo equipe",team:"J - Jordanie"},
+  {id:"JOR14",name:"Amer Jamous",team:"J - Jordanie"},
+  {id:"JOR15",name:"Musa Al-Taamari",team:"J - Jordanie"},
+  {id:"JOR16",name:"Yazan Al-Naimat",team:"J - Jordanie"},
+  {id:"JOR17",name:"Mahmoud Al-Mardi",team:"J - Jordanie"},
+  {id:"JOR18",name:"Ali Olwan",team:"J - Jordanie"},
+  {id:"JOR19",name:"Mohammad Abu Zrayq",team:"J - Jordanie"},
+  {id:"JOR20",name:"Ibrahim Sabra",team:"J - Jordanie"},
+  {id:"POR1",name:"Logo Portugal",team:"K - Portugal",foil:true},
+  {id:"POR2",name:"Diogo Costa",team:"K - Portugal"},
+  {id:"POR3",name:"Jose Sa",team:"K - Portugal"},
+  {id:"POR4",name:"Ruben Dias",team:"K - Portugal"},
+  {id:"POR5",name:"João Cancelo",team:"K - Portugal"},
+  {id:"POR6",name:"Diogo Dalot",team:"K - Portugal"},
+  {id:"POR7",name:"Nuno Mendes",team:"K - Portugal"},
+  {id:"POR8",name:"Gonçalo Inácio",team:"K - Portugal"},
+  {id:"POR9",name:"Bernardo Silva",team:"K - Portugal"},
+  {id:"POR10",name:"Bruno Fernandes",team:"K - Portugal"},
+  {id:"POR11",name:"Ruben Neves",team:"K - Portugal"},
+  {id:"POR12",name:"Vitinha",team:"K - Portugal"},
+  {id:"POR13",name:"Photo equipe",team:"K - Portugal"},
+  {id:"POR14",name:"João Neves",team:"K - Portugal"},
+  {id:"POR15",name:"Cristiano Ronaldo",team:"K - Portugal"},
+  {id:"POR16",name:"Francisco Trincao",team:"K - Portugal"},
+  {id:"POR17",name:"João Felix",team:"K - Portugal"},
+  {id:"POR18",name:"Gonçalo Ramos",team:"K - Portugal"},
+  {id:"POR19",name:"Pedro Neto",team:"K - Portugal"},
+  {id:"POR20",name:"Rafael Leão",team:"K - Portugal"},
+  {id:"COD1",name:"Logo Congo DR",team:"K - Congo DR",foil:true},
+  {id:"COD2",name:"Lionel Mpasi",team:"K - Congo DR"},
+  {id:"COD3",name:"Aaron Wan-Bissaka",team:"K - Congo DR"},
+  {id:"COD4",name:"Axel Tuanzebe",team:"K - Congo DR"},
+  {id:"COD5",name:"Arthur Masuaku",team:"K - Congo DR"},
+  {id:"COD6",name:"Chancel Mbemba",team:"K - Congo DR"},
+  {id:"COD7",name:"Joris Kayembe",team:"K - Congo DR"},
+  {id:"COD8",name:"Charles Pickel",team:"K - Congo DR"},
+  {id:"COD9",name:"Ngalayel Mukau",team:"K - Congo DR"},
+  {id:"COD10",name:"Edo Kayembe",team:"K - Congo DR"},
+  {id:"COD11",name:"Samuel Moutoussamy",team:"K - Congo DR"},
+  {id:"COD12",name:"Noah Sadiki",team:"K - Congo DR"},
+  {id:"COD13",name:"Photo equipe",team:"K - Congo DR"},
+  {id:"COD14",name:"Théo Bongonda",team:"K - Congo DR"},
+  {id:"COD15",name:"Meschak Elia",team:"K - Congo DR"},
+  {id:"COD16",name:"Yoane Wissa",team:"K - Congo DR"},
+  {id:"COD17",name:"Brian Cipenga",team:"K - Congo DR"},
+  {id:"COD18",name:"Fiston Mayele",team:"K - Congo DR"},
+  {id:"COD19",name:"Cédric Bakambu",team:"K - Congo DR"},
+  {id:"COD20",name:"Nathanaël Mbuku",team:"K - Congo DR"},
+  {id:"UZB1",name:"Logo Ouzbékistan",team:"K - Ouzbékistan",foil:true},
+  {id:"UZB2",name:"Utkir Yusupov",team:"K - Ouzbékistan"},
+  {id:"UZB3",name:"Farrukh Savfiev",team:"K - Ouzbékistan"},
+  {id:"UZB4",name:"Sherzod Nasrullaev",team:"K - Ouzbékistan"},
+  {id:"UZB5",name:"Umar Eshmurodov",team:"K - Ouzbékistan"},
+  {id:"UZB6",name:"Husniddin Aliqulov",team:"K - Ouzbékistan"},
+  {id:"UZB7",name:"Rustamjon Ashurmatov",team:"K - Ouzbékistan"},
+  {id:"UZB8",name:"Khojiakbar Alijonov",team:"K - Ouzbékistan"},
+  {id:"UZB9",name:"Abdukodir Khusanov",team:"K - Ouzbékistan"},
+  {id:"UZB10",name:"Odiljon Hamrobekov",team:"K - Ouzbékistan"},
+  {id:"UZB11",name:"Otabek Shukurov",team:"K - Ouzbékistan"},
+  {id:"UZB12",name:"Jamshid Iskanderov",team:"K - Ouzbékistan"},
+  {id:"UZB13",name:"Photo equipe",team:"K - Ouzbékistan"},
+  {id:"UZB14",name:"Azizbek Turgunboev",team:"K - Ouzbékistan"},
+  {id:"UZB15",name:"Khojimat Erkinov",team:"K - Ouzbékistan"},
+  {id:"UZB16",name:"Eldor Shomurodov",team:"K - Ouzbékistan"},
+  {id:"UZB17",name:"Oston Urunov",team:"K - Ouzbékistan"},
+  {id:"UZB18",name:"Jaloliddin Masharipov",team:"K - Ouzbékistan"},
+  {id:"UZB19",name:"Igor Sergeev",team:"K - Ouzbékistan"},
+  {id:"UZB20",name:"Abbosbek Fayzullaev",team:"K - Ouzbékistan"},
+  {id:"COL1",name:"Logo Colombie",team:"K - Colombie",foil:true},
+  {id:"COL2",name:"Camilo Vargas",team:"K - Colombie"},
+  {id:"COL3",name:"David Ospina",team:"K - Colombie"},
+  {id:"COL4",name:"Dávinson Sánchez",team:"K - Colombie"},
+  {id:"COL5",name:"Yerry Mina",team:"K - Colombie"},
+  {id:"COL6",name:"Daniel Munoz",team:"K - Colombie"},
+  {id:"COL7",name:"Johan Mojica",team:"K - Colombie"},
+  {id:"COL8",name:"Jhon Lucumí",team:"K - Colombie"},
+  {id:"COL9",name:"Santiago Arias",team:"K - Colombie"},
+  {id:"COL10",name:"Jefferson Lerma",team:"K - Colombie"},
+  {id:"COL11",name:"Kevin Castaño",team:"K - Colombie"},
+  {id:"COL12",name:"Richard Rios",team:"K - Colombie"},
+  {id:"COL13",name:"Photo equipe",team:"K - Colombie"},
+  {id:"COL14",name:"James Rodriguez",team:"K - Colombie"},
+  {id:"COL15",name:"Juan Fernando Quintero",team:"K - Colombie"},
+  {id:"COL16",name:"Jorge Carrascal",team:"K - Colombie"},
+  {id:"COL17",name:"Jon Arias",team:"K - Colombie"},
+  {id:"COL18",name:"Jhon Cordova",team:"K - Colombie"},
+  {id:"COL19",name:"Luis Suarez",team:"K - Colombie"},
+  {id:"COL20",name:"Luis Diaz",team:"K - Colombie"},
+  {id:"ENG1",name:"Logo Angleterre",team:"L - Angleterre",foil:true},
+  {id:"ENG2",name:"Jordan Pickford",team:"L - Angleterre"},
+  {id:"ENG3",name:"John Stones",team:"L - Angleterre"},
+  {id:"ENG4",name:"Marc Guéhi",team:"L - Angleterre"},
+  {id:"ENG5",name:"Ezri Konsa",team:"L - Angleterre"},
+  {id:"ENG6",name:"Trent Alexander-Arnold",team:"L - Angleterre"},
+  {id:"ENG7",name:"Reece James",team:"L - Angleterre"},
+  {id:"ENG8",name:"Dan Burn",team:"L - Angleterre"},
+  {id:"ENG9",name:"Jordan Henderson",team:"L - Angleterre"},
+  {id:"ENG10",name:"Declan Rice",team:"L - Angleterre"},
+  {id:"ENG11",name:"Jude Bellingham",team:"L - Angleterre"},
+  {id:"ENG12",name:"Cole Palmer",team:"L - Angleterre"},
+  {id:"ENG13",name:"Photo equipe",team:"L - Angleterre"},
+  {id:"ENG14",name:"Morgan Rogers",team:"L - Angleterre"},
+  {id:"ENG15",name:"Anthony Gordon",team:"L - Angleterre"},
+  {id:"ENG16",name:"Phil Foden",team:"L - Angleterre"},
+  {id:"ENG17",name:"Bukayo Saka",team:"L - Angleterre"},
+  {id:"ENG18",name:"Harry Kane",team:"L - Angleterre"},
+  {id:"ENG19",name:"Marcus Rashford",team:"L - Angleterre"},
+  {id:"ENG20",name:"Ollie Watkins",team:"L - Angleterre"},
+  {id:"CRO1",name:"Logo Croatie",team:"L - Croatie",foil:true},
+  {id:"CRO2",name:"Dominik Livaković",team:"L - Croatie"},
+  {id:"CRO3",name:"Duje Caleta-Car",team:"L - Croatie"},
+  {id:"CRO4",name:"Josko Gvardiol",team:"L - Croatie"},
+  {id:"CRO5",name:"Josip Stanišić",team:"L - Croatie"},
+  {id:"CRO6",name:"Luka Vušković",team:"L - Croatie"},
+  {id:"CRO7",name:"Josip Sutalo",team:"L - Croatie"},
+  {id:"CRO8",name:"Kristijan Jakic",team:"L - Croatie"},
+  {id:"CRO9",name:"Luka Modrić",team:"L - Croatie"},
+  {id:"CRO10",name:"Mateo Kovacic",team:"L - Croatie"},
+  {id:"CRO11",name:"Martin Baturina",team:"L - Croatie"},
+  {id:"CRO12",name:"Lovro Majer",team:"L - Croatie"},
+  {id:"CRO13",name:"Photo equipe",team:"L - Croatie"},
+  {id:"CRO14",name:"Mario Pasalic",team:"L - Croatie"},
+  {id:"CRO15",name:"Petar Sucic",team:"L - Croatie"},
+  {id:"CRO16",name:"Ivan Perišić",team:"L - Croatie"},
+  {id:"CRO17",name:"Marco Pasalic",team:"L - Croatie"},
+  {id:"CRO18",name:"Ante Budimir",team:"L - Croatie"},
+  {id:"CRO19",name:"Andrej Kramarić",team:"L - Croatie"},
+  {id:"CRO20",name:"Franjo Ivanovic",team:"L - Croatie"},
+  {id:"GHA1",name:"Logo Ghana",team:"L - Ghana",foil:true},
+  {id:"GHA2",name:"Lawrence Ati Zigi",team:"L - Ghana"},
+  {id:"GHA3",name:"Tariq Lamptey",team:"L - Ghana"},
+  {id:"GHA4",name:"Mohammed Salisu",team:"L - Ghana"},
+  {id:"GHA5",name:"Alidu Seidu",team:"L - Ghana"},
+  {id:"GHA6",name:"Alexander Djiku",team:"L - Ghana"},
+  {id:"GHA7",name:"Gideon Mensah",team:"L - Ghana"},
+  {id:"GHA8",name:"Caleb Yirenkyi",team:"L - Ghana"},
+  {id:"GHA9",name:"Abdul Issahaku Fatawu",team:"L - Ghana"},
+  {id:"GHA10",name:"Thomas Partey",team:"L - Ghana"},
+  {id:"GHA11",name:"Salis Abdul Samed",team:"L - Ghana"},
+  {id:"GHA12",name:"Kamaldeen Sulemana",team:"L - Ghana"},
+  {id:"GHA13",name:"Photo equipe",team:"L - Ghana"},
+  {id:"GHA14",name:"Mohammed Kudus",team:"L - Ghana"},
+  {id:"GHA15",name:"Inaki Williams",team:"L - Ghana"},
+  {id:"GHA16",name:"Jordan Ayew",team:"L - Ghana"},
+  {id:"GHA17",name:"Andrew Ayew",team:"L - Ghana"},
+  {id:"GHA18",name:"Joseph Paintsil",team:"L - Ghana"},
+  {id:"GHA19",name:"Osman Bukari",team:"L - Ghana"},
+  {id:"GHA20",name:"Antoine Semenyo",team:"L - Ghana"},
+  {id:"PAN1",name:"Logo Panama",team:"L - Panama",foil:true},
+  {id:"PAN2",name:"Orlando Mosquera",team:"L - Panama"},
+  {id:"PAN3",name:"Luis Mejia",team:"L - Panama"},
+  {id:"PAN4",name:"Fidel Escobar",team:"L - Panama"},
+  {id:"PAN5",name:"Andres Andrade",team:"L - Panama"},
+  {id:"PAN6",name:"Michael Amir Murillo",team:"L - Panama"},
+  {id:"PAN7",name:"Eric Davis",team:"L - Panama"},
+  {id:"PAN8",name:"Jose Cordoba",team:"L - Panama"},
+  {id:"PAN9",name:"Cesar Blackman",team:"L - Panama"},
+  {id:"PAN10",name:"Cristian Martinez",team:"L - Panama"},
+  {id:"PAN11",name:"Aníbal Godoy",team:"L - Panama"},
+  {id:"PAN12",name:"Adalberto Carrasquilla",team:"L - Panama"},
+  {id:"PAN13",name:"Photo equipe",team:"L - Panama"},
+  {id:"PAN14",name:"Édgar Bárcenas",team:"L - Panama"},
+  {id:"PAN15",name:"Carlos Harvey",team:"L - Panama"},
+  {id:"PAN16",name:"Ismael Díaz",team:"L - Panama"},
+  {id:"PAN17",name:"Jose Fajardo",team:"L - Panama"},
+  {id:"PAN18",name:"Cecilio Waterman",team:"L - Panama"},
+  {id:"PAN19",name:"Jose Luiz Rodriguez",team:"L - Panama"},
+  {id:"PAN20",name:"Alberto Quintero",team:"L - Panama"}
+];
+
+const TEAMS=[...new Set(STICKERS.map(s=>s.team))];
+const KEY="panini2026";
+let state={owned:{},doubles:{}};
+
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function load(){try{const s=localStorage.getItem(KEY);if(s)state=JSON.parse(s);}catch(e){}}
+
+load();
+updateHeader();
+
+let currentTab="collection";
+
+function showTab(tab){
+  currentTab=tab;
+  document.querySelectorAll(".tab").forEach((t,i)=>{
+    t.classList.toggle("active",["collection","manquants","doubles","stats"][i]===tab);
+  });
+  render();
+}
+
+function toggleOwned(id){
+  if(state.owned[id]){delete state.owned[id];delete state.doubles[id];}
+  else state.owned[id]=true;
+  save();updateHeader();render();
+}
+
+function setDoubles(id,n){
+  if(n<=0)delete state.doubles[id];else state.doubles[id]=n;
+  save();updateHeader();render();
+}
+
+function updateHeader(){
+  const owned=Object.keys(state.owned).length;
+  const total=STICKERS.length;
+  const missing=total-owned;
+  const pct=Math.round(owned/total*100);
+  const doubles=Object.values(state.doubles).reduce((a,b)=>a+b,0);
+  document.getElementById("ownedCount").textContent=owned;
+  document.getElementById("ownedCount2").textContent=owned;
+  document.getElementById("missingCount").textContent=missing;
+  document.getElementById("pct").textContent=pct;
+  document.getElementById("totalCount").textContent=total;
+  document.getElementById("doublesCount").textContent=doubles;
+  document.getElementById("progFill").style.width=pct+"%";
+  document.getElementById("tab-manquants").textContent="❌ Manquants ("+missing+")";
+  document.getElementById("tab-doubles").textContent="🔄 Doubles ("+doubles+")";
+}
+
+function getFilters(){
+  const search=(document.getElementById("search")||{value:""}).value.toLowerCase();
+  const team=(document.getElementById("teamFilter")||{value:"Tous"}).value;
+  return{search,team};
+}
+
+function render(){
+  const c=document.getElementById("content");
+  if(currentTab==="collection") renderCollection(c);
+  else if(currentTab==="manquants") renderManquants(c);
+  else if(currentTab==="doubles") renderDoubles(c);
+  else renderStats(c);
+}
+
+function renderCollection(c){
+  const {search,team}=getFilters();
+  const filtered=STICKERS.filter(s=>{
+    const tm=team==="Tous"||s.team===team;
+    const sm=!search||s.name.toLowerCase().includes(search)||s.id.toLowerCase().includes(search);
+    return tm&&sm;
+  });
+  let html=`<div class="filters">
+    <input id="search" placeholder="🔍 Rechercher..." oninput="render()" value="${(document.getElementById("search")||{value:""}).value}">
+    <select id="teamFilter" onchange="render()">
+      <option value="Tous">Toutes les équipes</option>
+      ${TEAMS.map(t=>`<option value="${t}" ${team===t?"selected":""}>${t}</option>`).join("")}
+    </select>
+  </div>`;
+  html+=filtered.map(s=>{
+    const owned=!!state.owned[s.id];
+    const d=state.doubles[s.id]||0;
+    return `<div class="sticker-row ${owned?"owned":""}">
+      <button class="check-btn ${owned?"owned":""}" onclick="toggleOwned('${s.id}')">${owned?"✓":"○"}</button>
+      <div class="sticker-info">
+        <div class="sticker-id">${s.id}${s.foil?" ⭐":""}</div>
+        <div class="sticker-name">${s.name}</div>
+        <div class="sticker-team">${s.team}</div>
+      </div>
+      ${owned?`<div class="doubles-ctrl">
+        <button class="d-btn" onclick="setDoubles('${s.id}',${d-1})">−</button>
+        <span class="d-num ${d>0?"has":""}">${d}</span>
+        <button class="d-btn" onclick="setDoubles('${s.id}',${d+1})">+</button>
+      </div>`:""}
+    </div>`;
+  }).join("");
+  c.innerHTML=html;
+}
+
+function renderManquants(c){
+  const missing=STICKERS.filter(s=>!state.owned[s.id]);
+  let html=`<div class="missing-info">Il vous manque <strong style="color:#f87171">${missing.length} stickers</strong> sur ${STICKERS.length}.</div>`;
+  if(missing.length===0){html+='<div class="complete">🎉 Collection complète !</div>';}
+  else{
+    TEAMS.filter(t=>missing.some(s=>s.team===t)).forEach(t=>{
+      const tm=missing.filter(s=>s.team===t);
+      html+=`<div class="team-section">
+        <div class="team-title">${t} (${tm.length} manquants)</div>
+        <div class="tag-grid">${tm.map(s=>`<button class="miss-tag" onclick="toggleOwned('${s.id}')">${s.id}${s.foil?" ⭐":""}</button>`).join("")}</div>
+      </div>`;
+    });
+  }
+  c.innerHTML=html;
+}
+
+function renderDoubles(c){
+  const dl=STICKERS.filter(s=>state.doubles[s.id]>0);
+  const total=Object.values(state.doubles).reduce((a,b)=>a+b,0);
+  let html=`<div class="missing-info">Vous avez <strong style="color:#f97316">${total} doubles</strong> à échanger.</div>`;
+  if(dl.length===0) html+='<div class="empty">Aucun double pour l instant</div>';
+  else html+=dl.map(s=>`<div class="double-row">
+    <div class="double-info">
+      <span class="double-id">${s.id} </span>
+      <span class="double-name">${s.name}</span>
+      <div class="double-team">${s.team}</div>
+    </div>
+    <div class="d-ctrl">
+      <button onclick="setDoubles('${s.id}',${(state.doubles[s.id]||0)-1})">−</button>
+      <span class="d-count">×${state.doubles[s.id]}</span>
+      <button onclick="setDoubles('${s.id}',${(state.doubles[s.id]||0)+1})">+</button>
+    </div>
+  </div>`).join("");
+  c.innerHTML=html;
+}
+
+function renderStats(c){
+  const owned=Object.keys(state.owned).length;
+  const total=STICKERS.length;
+  const missing=total-owned;
+  const doubles=Object.values(state.doubles).reduce((a,b)=>a+b,0);
+  const pct=Math.round(owned/total*100);
+  let html=`<div class="stats-grid">
+    ${[["Possédés",owned,"#4ade80"],["Manquants",missing,"#f87171"],["Doubles",doubles,"#f97316"],["Progression",pct+"%","#ffd700"]]
+      .map(([l,v,col])=>`<div class="stat-card"><div class="stat-val" style="color:${col}">${v}</div><div class="stat-lbl">${l}</div></div>`).join("")}
+  </div>
+  <div style="font-size:13px;font-weight:700;color:#ffd700;margin-bottom:10px">Progression par équipe</div>`;
+  html+=TEAMS.map(t=>{
+    const ts=STICKERS.filter(s=>s.team===t);
+    const ow=ts.filter(s=>state.owned[s.id]).length;
+    const p=Math.round(ow/ts.length*100);
+    return `<div class="team-bar-lbl"><span style="color:#ccc">${t}</span><span style="color:${p===100?"#4ade80":"#888"}">${ow}/${ts.length}</span></div>
+    <div class="team-bar-bg"><div class="team-bar-fill ${p===100?"full":""}" style="width:${p}%"></div></div>`;
+  }).join("");
+  c.innerHTML=html;
+}
+
+render();
+</script>
+</body>
+</html>
